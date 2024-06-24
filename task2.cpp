@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define ATTEMPT_COUNT 1e5
+#define ATTEMPT_COUNT 10
 
 #ifdef CPP_VERSION
 
@@ -18,13 +18,12 @@ void thread_func(std::string msg) {
 
 int main(int argc, char *argv[]) {
     std::thread thread(thread_func, "Hello from multithreading world in C++!\n");
+    thread.join();
 
     std::cout << "Main thread" << std::this_thread::get_id() << "\n";
     for (int i = 0; i < ATTEMPT_COUNT; ++i) {
         std::cout << "Main thread msg\n";
     }
-
-    thread.join();
     return 0;
 }
 
@@ -58,12 +57,13 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
+    pthread_join(thread_id, NULL);
+
     printf("Main funciton, id: %d\n", gettid());
     for (int i = 0; i < ATTEMPT_COUNT; ++i) {
         printf("Main thread msg\n");
     }
 
-    pthread_join(thread_id, NULL);
     return 0;
 }
 
